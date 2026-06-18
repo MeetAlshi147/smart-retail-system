@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        gcloud functions deploy bigquery-writer \
+        --gen2 \
+        --runtime python311 \
+        --region asia-south1 \
+        --source . \
+        --entry-point write_to_bigquery \
+        --trigger-http
+
+options:
+  logging: CLOUD_LOGGING_ONLY
