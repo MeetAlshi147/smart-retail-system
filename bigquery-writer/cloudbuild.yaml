@@ -4,13 +4,9 @@ steps:
     args:
       - -c
       - |
-        gcloud functions deploy bigquery-writer \
-          --gen2 \
-          --runtime=python311 \
-          --region=asia-south1 \
+        gcloud run deploy bigquery-writer \
           --source=bigquery-writer \
-          --entry-point=write_to_bigquery \
-          --trigger-http \
+          --region=asia-south1 \
           --allow-unauthenticated
 
 options:
