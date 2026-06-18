@@ -4,13 +4,9 @@ steps:
     args:
       - -c
       - |
-        gcloud functions deploy order-api \
-          --gen2 \
-          --runtime=python311 \
-          --region=asia-south1 \
+        gcloud run deploy order-api \
           --source=order-api \
-          --entry-point=publish_order \
-          --trigger-http \
+          --region=asia-south1 \
           --allow-unauthenticated
 
 options:
