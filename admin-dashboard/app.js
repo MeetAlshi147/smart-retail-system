@@ -1,5 +1,5 @@
 const formatINR = (value) => {
-    return `₹ ${(value / 100000).toFixed(2)} Lakh`;
+    return `INR ${(value / 100000).toFixed(2)} Lakh`;
 };
 
 fetch("https://forecast-api-195476262139.asia-south1.run.app/forecast")
