@@ -1,0 +1,24 @@
+name: Deploy Admin Dashboard
+
+on:
+  push:
+    paths:
+      - 'admin-dashboard/**'
+      - '.github/workflows/deploy-admin-dashboard.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Upload Dashboard
+        run: |
+          gsutil -m cp -r admin-dashboard/* gs://smart-retail-admin-dashboard/
