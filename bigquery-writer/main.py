@@ -2,7 +2,7 @@ import functions_framework
 import json
 import base64
 from datetime import datetime
-
+#trail test
 from google.cloud import bigquery
 from google.cloud import storage
 
