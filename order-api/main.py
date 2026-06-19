@@ -1,7 +1,7 @@
 import functions_framework
 from google.cloud import pubsub_v1
 import json
-
+# GitHub Actions test
 project_id = "retail-analytics-system"
 topic_id = "order-topic"
 
