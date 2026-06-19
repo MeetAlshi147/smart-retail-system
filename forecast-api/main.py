@@ -5,10 +5,13 @@ app = Flask(__name__)
 
 client = bigquery.Client()
 
+
+# =========================
+# FORECAST API
+# =========================
 @app.route("/forecast", methods=["GET", "OPTIONS"])
 def forecast():
 
-    # CORS Preflight Request
     if request.method == "OPTIONS":
         headers = {
             "Access-Control-Allow-Origin": "*",
@@ -45,12 +48,60 @@ def forecast():
         "forecast": forecasts
     })
 
-    # CORS Headers
     response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
     return response
+
+
+# =========================
+# ANALYTICS API
+# =========================
+@app.route("/analytics", methods=["GET", "OPTIONS"])
+def analytics():
+
+    if request.method == "OPTIONS":
+        headers = {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type"
+        }
+        return ("", 204, headers)
+
+    summary_query = """
+    SELECT
+      COUNT(*) AS total_orders,
+      SUM(amount) AS total_revenue
+    FROM `retail-analytics-system.retail_analytics.orders`
+    """
+
+    summary = list(client.query(summary_query).result())[0]
+
+    product_query = """
+    SELECT
+      product,
+      COUNT(*) AS sales
+    FROM `retail-analytics-system.retail_analytics.orders`
+    GROUP BY product
+    ORDER BY sales DESC
+    LIMIT 1
+    """
+
+    product = list(client.query(product_query).result())[0]
+
+    response = jsonify({
+        "totalOrders": summary.total_orders,
+        "totalRevenue": round(summary.total_revenue, 2),
+        "topProduct": product.product
+    })
+
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+
+    return response
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
