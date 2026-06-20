@@ -1,7 +1,6 @@
 const formatINR = (value) => {
-return ${(value / 100000).toFixed(2)} Lakh;
+    return `₹ ${(value / 100000).toFixed(2)} Lakh`;
 };
-
 // Forecast Data
 async function loadForecast() {
 try {
